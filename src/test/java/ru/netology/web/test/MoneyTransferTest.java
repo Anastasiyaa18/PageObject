@@ -60,5 +60,18 @@ public class MoneyTransferTest {
 
     }
 
+    @Test
+    void errorMessageIfAmountMoreBalance() {
+        var firstCardBalance = dashboardPage.getCardBalance(firstCardInfo);
+        var amount = generateInvalidAmount(firstCardBalance);
+        var transferPage = dashboardPage.selectCardToTransfer(secondCardInfo);
+        transferPage.makeTransfer(String.valueOf(amount), firstCardInfo);
+        transferPage.findErrorMessage("Ошибка! На карте недостаточно средств.");
+        var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCardInfo);
+        var actualBalanceSecondCard = dashboardPage.getCardBalance(secondCardInfo);
+        assertEquals(firstCardInfo, actualBalanceFirstCard);
+        assertEquals(secondCardInfo, actualBalanceSecondCard);
+
+    }
 
 }
